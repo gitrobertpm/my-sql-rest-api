@@ -3,50 +3,54 @@
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
     firstName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Please enter a First Name"
-          },
-          isAlpha: true
-        }
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '',
+      validate: {
+        notEmpty: {
+          msg: "Please enter a First Name"
+        },
+        isAlpha: true
+      }
     },
     lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Please enter a Last Name"
-          },
-          isAlpha: true
-        }
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '',
+      validate: {
+        notEmpty: {
+          msg: "Please enter a Last Name"
+        },
+        isAlpha: true
+      }
     },
     emailAddress: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "Please enter an email address"
-          },
-          isEmail: {
-            msg: "Please enter a valid email address"
-          }
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '',
+      validate: {
+        notEmpty: {
+          msg: "Please enter an email address"
+        },
+        isEmail: {
+          msg: "Please enter a valid email address"
         }
+      }
     },
     password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            msg: "You must enter a password"
-          }
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '',
+      validate: {
+        notEmpty: {
+          msg: "You must enter a password"
         }
+      }
     },
   });
 

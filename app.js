@@ -60,21 +60,29 @@ app.use((err, req, res, next) => {
 
   // Array to hold error messages caught by global error handler
   let errMsgs = [];
-
-  // If error - map errors and push messages to array
+  
   if (err) {
     console.log("error name: " + (err.name));
+    
+    // Set error status to 400 if necessary
+    if (err.name === "SequelizeValidationError" || 
+        err.name === "SequelizeUniqueConstraintError" || 
+        err.message === 'Illegal arguments: undefined, string') {
+      err.status = 400;
+    }
+
+    // Handle empty request body
+    if (err.message === 'Illegal arguments: undefined, string') {
+      err.message = 'Empty request body.  Need to send over data to create new user or course.';
+    }
+
+    // Map errors and push messages to array
     if (err.errors) {
       err.errors.map(err => {
         errMsgs.push(err.message);
       });
     } else {
       errMsgs = err.message;
-    }
-
-    // Set error status to 400 if necessary
-    if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
-      err.status = 400;
     }
   }
 

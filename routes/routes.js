@@ -65,7 +65,7 @@ router.get('/users', authenticateUser, (req, res, next) => {
 // post /api/users - 201 - Creates a user, sets the Location header to "/", and returns no content - validation handled in global error handler
 router.post('/users', (req, res, next) => {
   User.create(userCreate(req.body)).then(() => {
-    return res.location('/').status(201).end();
+    res.location('/').status(201).end();
   }).catch(err => {
     next(err); 
   });
@@ -85,14 +85,7 @@ router.get('/courses', (req, res, next) => {
 // GET /api/courses/:id 200 - Returns a the course (including the user that owns the course) for the provided course ID
 router.get('/courses/:id', (req, res, next) => {
   const id = req.params.id;
-  Course.findByPk(id, {
-    include: [
-      {
-        model: User,
-        as: 'creator',
-      },
-    ],
-  }).then(course => {
+  Course.findByPk(id, CourseWithAttributesAndIncludes).then(course => {
     course ? res.status(200).json(course) : res.status(400).json({error: "No such course"});    
   }).catch(err => {
     next(err);
@@ -112,8 +105,16 @@ router.post('/courses', authenticateUser, (req, res, next) => {
       console.log("Course already exists");
       res.location('/').status(400).json({ error: "Course already exists" });;
     } else {
-      return Course.create(courseAttributesObject(body)).then(() => {
-        res.location('/').status(201).end();
+      Course.create(courseAttributesObject(body)).then(() => {
+        Course.findOne({
+          where: {
+            title: body.title
+          }
+        }).then((newCourse) => {
+          res.location(`/courses/:${newCourse.id}`).status(201).end();
+        }).catch(err => {
+          next(err);
+        });
       }).catch(err => {
         next(err);
       });
@@ -131,8 +132,11 @@ router.put('/courses/:id', authenticateUser, (req, res, next) => {
   Course.findByPk(id).then(course => {
     if (course) {
       if (user.id === course.userId) {
-        course.update(courseAttributesObject(body));
-        res.location('/').status(204).end();
+        course.update(courseAttributesObject(body)).then(() => {
+          res.location('/').status(204).end();
+        }).catch(err => {
+          next(err);
+        });
       } else {
         res.location('/').status(403).json("Not your course, yo!");
       }

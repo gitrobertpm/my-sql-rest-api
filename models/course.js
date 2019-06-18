@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: '',
       validate: {
         notEmpty: {
           msg: "Please enter a course title"
@@ -19,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     description:{
       type: DataTypes.TEXT,
       allowNull: false,
+      defaultValue: '',
       validate: {
         notEmpty: {
           msg: "Please enter a course description"
@@ -30,9 +32,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     materialsNeeded: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 
   Course.associate = (models) => {
