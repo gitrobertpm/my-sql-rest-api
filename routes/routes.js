@@ -75,6 +75,7 @@ router.post('/users', (req, res, next) => {
 // GET /api/courses 200 - Returns a list of courses (including the user that owns each course)
 router.get('/courses', (req, res, next) => {
   Course.findAll(CourseWithAttributesAndIncludes).then(courses => {
+    console.log(courses);
     res.status(200).json(courses);
   }).catch(err => {
     next(err);
