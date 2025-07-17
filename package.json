@@ -18,7 +18,7 @@
     "bcryptjs": "^2.4.3",
     "cross-env": "^7.0.3",
     "express": "^4.21.2",
-    "morgan": "^1.9.0",
+    "morgan": "^1.10.1",
     "promise.prototype.finally": "^3.1.0",
     "sequelize": "^6.29.0",
     "sequelize-cli": "^5.5.1",
